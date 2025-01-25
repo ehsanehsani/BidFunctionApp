@@ -19,6 +19,11 @@ public class BidRepository : IBidRepository
         return bid.Id;
     }
 
+    public async Task<Bid?> GetBidByReferenceIdAsync(Guid referenceId)
+    {
+        return await _context.Bids.FirstOrDefaultAsync(x => x.ReferenceId.Equals(referenceId.ToString()));
+    }
+
     public async Task<Bid?> GetBidByIdAsync(int id)
     {
         return await _context.Bids.FindAsync(id);

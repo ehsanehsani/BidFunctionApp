@@ -3,4 +3,4 @@ using MediatR;
 
 namespace BidFunctionApp.Requests;
 
-public record ProcessBidRequest(Bid BidData) : IRequest<string>;
+public record ReadBidRequest(Guid ReferenceId) : IRequest<Bid>;

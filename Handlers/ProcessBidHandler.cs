@@ -3,30 +3,28 @@ using System.Threading.Tasks;
 using MediatR;
 using BidFunctionApp.Requests;
 using BidFunctionApp.Repository;
+using RabbitMQ.Client;
+using System.Text.Json;
+using System.Text;
 
 namespace BidFunctionApp.Handlers
 {
     public class ProcessBidHandler : IRequestHandler<ProcessBidRequest, string>
     {
-        private IBidRepository _bidRepository;
-
-        public ProcessBidHandler(IBidRepository bidRepository)
-        {
-            _bidRepository = bidRepository;
-        }
-
         public async Task<string> Handle(ProcessBidRequest request, CancellationToken cancellationToken)
         {
+            var referenceId = Guid.NewGuid().ToString();
+            request.BidData.ReferenceId = referenceId;
 
-            var id = await _bidRepository.AddBidAsync(new Models.Bid()
-            {
-                Amount = 10,
-                BidderName = "test",
-                BidTime = DateTime.UtcNow,
-            });
+            var factory = new ConnectionFactory { HostName = "localhost" };
+            using var connection = await factory.CreateConnectionAsync();
+            using var channel = await connection.CreateChannelAsync();
 
-            // Handle the bid processing logic
-            return id.ToString();
+            var message = JsonSerializer.Serialize(request.BidData);
+            var body = Encoding.UTF8.GetBytes(message);
+
+            await channel.BasicPublishAsync(exchange: string.Empty, routingKey: "bids_queue", body: body, cancellationToken: cancellationToken);           
+            return referenceId;
         }
     }
 }

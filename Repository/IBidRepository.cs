@@ -7,5 +7,6 @@ namespace BidFunctionApp.Repository
         Task<int> AddBidAsync(Bid bid);
         Task<Bid?> GetBidByIdAsync(int id);
         Task<IEnumerable<Bid>> GetAllBidsAsync();
+        Task<Bid?> GetBidByReferenceIdAsync(Guid referenceId);
     }
 }
