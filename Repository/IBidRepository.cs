@@ -1,12 +1,10 @@
 ﻿using BidFunctionApp.Models;
 
-namespace BidFunctionApp.Repository
+namespace BidFunctionApp.Repository;
+public interface IBidRepository
 {
-    public interface IBidRepository
-    {
-        Task<int> AddBidAsync(Bid bid);
-        Task<Bid?> GetBidByIdAsync(int id);
-        Task<IEnumerable<Bid>> GetAllBidsAsync();
-        Task<Bid?> GetBidByReferenceIdAsync(Guid referenceId);
-    }
+    Task<int> AddBidAsync(Bid bid);
+    Task<Bid?> GetBidByIdAsync(int id);
+    Task<IEnumerable<Bid>> GetAllBidsAsync();
+    Task<Bid?> GetBidByReferenceIdAsync(Guid referenceId);
 }

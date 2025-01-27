@@ -1,7 +1,6 @@
 ﻿using BidFunctionApp.Models;
 using BidFunctionApp.Repository;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 public class BidRepository : IBidRepository
 {

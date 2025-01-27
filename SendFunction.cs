@@ -25,21 +25,11 @@ namespace BidFunctionApp
         {
             try
             {
-
-                // Read the request body
                 string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-
-                // Deserialize the request body to a Bid object
                 var bid = System.Text.Json.JsonSerializer.Deserialize<Bid>(requestBody, new System.Text.Json.JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
-                });
-
-                // Check if the bid is null
-                if (bid == null)
-                {
-                    throw new ValidationException("The bid object is valid. Please provide a valid bid payload.");
-                }
+                }) ?? throw new ValidationException("The bid object is valid. Please provide a valid bid payload.");
 
                 var request = new ProcessBidRequest(bid);
                 var referenceId = await _mediator.Send(request);
